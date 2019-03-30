@@ -1,6 +1,9 @@
 {
-    "!!! WARNING !!!": "PLEASE DO NOT MODIFY THIS FILE! USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags",
     "configurations": [
+        {
+            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags",
+            "intelliSenseMode": "msvc-x64"
+        },
         {
             "name": "Win32",
             "includePath": [
@@ -12,8 +15,8 @@
                 "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SoftwareSerial/src",
                 "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/Wire/src",
                 "C:/Users/jandr/.platformio/packages/tool-unity",
-                "c:/Users/jandr/Documents/PlatformIO/Projects/190316-101003-arduino-blink/include",
-                "c:/Users/jandr/Documents/PlatformIO/Projects/190316-101003-arduino-blink/src",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/include",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/src",
                 ""
             ],
             "browse": {
@@ -28,13 +31,13 @@
                     "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SoftwareSerial/src",
                     "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/Wire/src",
                     "C:/Users/jandr/.platformio/packages/tool-unity",
-                    "c:/Users/jandr/Documents/PlatformIO/Projects/190316-101003-arduino-blink/include",
-                    "c:/Users/jandr/Documents/PlatformIO/Projects/190316-101003-arduino-blink/src",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/include",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/src",
                     ""
                 ]
             },
             "defines": [
-                "PLATFORMIO=30605",
+                "PLATFORMIO=30606",
                 "ARDUINO_AVR_NANO",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",
