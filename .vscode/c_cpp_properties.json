@@ -1,54 +1,75 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
     "configurations": [
         {
-            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags",
-            "intelliSenseMode": "msvc-x64"
-        },
-        {
-            "name": "Win32",
+            "name": "PlatformIO",
             "includePath": [
-                "C:/Users/jandr/.platformio/packages/framework-arduinoavr/cores/arduino",
-                "C:/Users/jandr/.platformio/packages/framework-arduinoavr/variants/eightanaloginputs",
-                "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/EEPROM/src",
-                "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/HID/src",
-                "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SPI/src",
-                "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SoftwareSerial/src",
-                "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/Wire/src",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/include",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/src",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/DallasTemperature",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/OneWire@src-7394625c00c7ad4e547cedddf6448675",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/ArduinoJson@src-7b434fc0425f18fa2bb13b3492805539/src",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/SparkFun BME280/src",
+                "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "C:/Users/jandr/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "C:/Users/jandr/.platformio/packages/framework-arduino-avr/variants/eightanaloginputs",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/Adafruit BusIO",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/Adafruit VEML7700 Library",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/ArduinoJson/src",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/OneWire",
+                "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/SparkFun CCS811 Arduino Library/src",
+                "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
                 "C:/Users/jandr/.platformio/packages/tool-unity",
-                "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/include",
-                "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/src",
                 ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
-                "databaseFilename": "${workspaceRoot}/.vscode/.browse.c_cpp.db",
                 "path": [
-                    "C:/Users/jandr/.platformio/packages/framework-arduinoavr/cores/arduino",
-                    "C:/Users/jandr/.platformio/packages/framework-arduinoavr/variants/eightanaloginputs",
-                    "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/EEPROM/src",
-                    "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/HID/src",
-                    "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SPI/src",
-                    "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SoftwareSerial/src",
-                    "C:/Users/jandr/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/Wire/src",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/include",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/src",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/DallasTemperature",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/OneWire@src-7394625c00c7ad4e547cedddf6448675",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/ArduinoJson@src-7b434fc0425f18fa2bb13b3492805539/src",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/SparkFun BME280/src",
+                    "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "C:/Users/jandr/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "C:/Users/jandr/.platformio/packages/framework-arduino-avr/variants/eightanaloginputs",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/Adafruit BusIO",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/Adafruit VEML7700 Library",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/ArduinoJson/src",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/OneWire",
+                    "c:/Users/jandr/Documents/PlatformIO/Projects/tesis/.pio/libdeps/nanoatmega328/SparkFun CCS811 Arduino Library/src",
+                    "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    "C:/Users/jandr/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
                     "C:/Users/jandr/.platformio/packages/tool-unity",
-                    "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/include",
-                    "c:/Users/jandr/Documents/PlatformIO/Projects/blink/blink/src",
                     ""
                 ]
             },
             "defines": [
-                "PLATFORMIO=30606",
+                "PLATFORMIO=50100",
                 "ARDUINO_AVR_NANO",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",
-                "ARDUINO=10805",
+                "ARDUINO=10808",
                 "__AVR_ATmega328P__",
                 ""
             ],
-            "intelliSenseMode": "clang-x64",
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "compilerPath": "C:/Users/jandr/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe -mmcu=atmega328p"
+            "compilerPath": "C:/Users/jandr/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+            "compilerArgs": [
+                "-mmcu=atmega328p",
+                ""
+            ]
         }
     ],
     "version": 4
