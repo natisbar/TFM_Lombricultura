@@ -24,8 +24,8 @@ float humLombriz = 0;
 int humPinPlanta = A1; 
 float humPlanta = 0; 
 
-int modoPin = 5;
-int aguaPin = 4;
+int aguaPPin = 5;
+int aguaLPin = 4;
 int humusPin = 8;
 int humusPin_agua = 6;
 int humusPin_humus = 7;
@@ -58,15 +58,15 @@ const int T_GPS_MILIS =T_GPS_SEGUNDOS*1000;
 
 void setup()
 {
-  // Serial.begin(115200);
-  Serial.begin(9600);
+  Serial.begin(115200);
+  // Serial.begin(9600);
   Wire.begin();
   tempLom.begin();
-  pinMode(modoPin, OUTPUT);
+  pinMode(aguaLPin, OUTPUT);
+  pinMode(aguaPPin, OUTPUT);
   pinMode(humusPin, OUTPUT);
   pinMode(humusPin_agua, OUTPUT);
   pinMode(humusPin_humus, OUTPUT);
-  pinMode(aguaPin, OUTPUT);
   pinMode(flot1Pin, INPUT);
   pinMode(flot2Pin, INPUT);
   pinMode(flujoPin, INPUT);
@@ -82,66 +82,25 @@ void loop()
     TakeData(fin);
     
 
-    // if(evento){
-      aux = doc2["modo"].as<bool>();
-      modo = validar(aux, modoPin);
-      aux = doc2["valva"].as<bool>();
-      agua = validar(aux, aguaPin);
-      auxh = doc2["valvh"].as<bool>();
-      // humus = validar(aux, humusPin);
+    if(evento){
+      aux = doc2["valval"].as<bool>(); 
+      modo = validar(aux, aguaLPin);   //Valvula agua lombriz
+      aux = doc2["valvap"].as<bool>(); 
+      agua = validar(aux, aguaPPin);   //Valvula agua planta
+      aux = doc2["valvh"].as<bool>(); 
+      humus = validar(aux, humusPin);  //bomba humus
+      aux = doc2["valvh_agua"].as<bool>();
+      humus = validar(aux, humusPin_agua);  //bomba mezcla agua
+      aux = doc2["valvh_humus"].as<bool>();
+      humus = validar(aux, humusPin_humus); //bomba mezcla humus
+      // auxh = doc2["valvh"].as<bool>();
+      
       // serializeJson(doc2, Serial);
-      if(auxh){
-       auxh2=true;
-      }
-      else auxh2=false;
-    //   evento = false;
-    // }
-
-
-    if(auxh2==true && NumVal<3 && repetir<1){
-      // Serial.println("entre a validación");
-      if(!auxh3){
-        if(d>min && NumVal==0){
-          Serial.println("auxh3 es falso!");
-          humus_humus = validar(true, humusPin_humus);
-          Serial.println("ambos flotadores false");
-          NumVal=1;
-        }
-        if(d<=min && d>=max && NumVal==1){
-          humus_humus = validar(false, humusPin_humus);
-          humus_agua = validar(true, humusPin_agua);
-          Serial.println("flotador 1 true");
-          NumVal=2;
-        }
-        if(d<max && NumVal==2){
-          humus_humus = validar(false, humusPin_humus);
-          humus_agua = validar(false, humusPin_agua);
-          humus = validar(true, humusPin);
-          NumVal=3;
-          Serial.println("flotador 1 y 2 true");
-          auxh3=true;
-        }
-      }
-    }
-    else if (auxh3==true && NumVal>2){
-        if(d>=(total-1)){
-          Serial.println("no hay humus");
-          auxh3=false;
-          auxh2=false;
-          NumVal=0;
-          humus = validar(false, humusPin);
-          repetir++;
-        }
-
-        else if (d<=(total-1) && auxh==true){
-          humus = validar(true, humusPin);
-          Serial.println("aun hay flujo");
-        }
-    }
-    else if (auxh2==false){
-      humus_humus = validar(false, humusPin_humus);
-      humus_agua = validar(false, humusPin_agua);
-      humus = validar(false, humusPin);
+      // if(auxh){
+      //  auxh2=true;
+      // }
+      // else auxh2=false;
+      // evento = false;
     }
    
 }
@@ -238,28 +197,14 @@ void TakeData(int fin){
       doc["Tempplanta"] = ((int) (tempplanta*100))/100.0;
       doc["Humlombriz"] = ((int) (humLombriz*100))/100.0;
       doc["Humplanta"] = ((int) (humPlanta*100))/100.0;
-      doc["flot1state"] = flot1state;
-      doc["flot2state"] = flot2state;
+      doc["Ultras"] = d;
 
-      String Data2 = "{\"modo\":false,\"valva\":false,\"valvh\":true}";
-      deserializeJson(doc2, Data2);
+      // String Data2 = "{\"modo\":false,\"valva\":false,\"valvh\":true}";
+      // deserializeJson(doc2, Data2);
       // serializeJson(doc2, Serial);
       // Serial.println();
-      // serializeJson(doc, Serial);
+      serializeJson(doc, Serial);
       Serial.println(); 
-
-      Serial.println(NumVal);
-      Serial.print("Humus: ");
-      Serial.println(humus);
-      Serial.print("distancia: ");
-      Serial.println(d);
-      Serial.println(" auxh2: ");
-      Serial.print(auxh2);
-      Serial.print(" auxh: ");
-      Serial.print(auxh);
-      Serial.print(" auxh3: ");
-      Serial.print(auxh3);
-      Serial.println();
       inicio = millis();
     }
 }
