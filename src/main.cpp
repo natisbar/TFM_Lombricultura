@@ -24,16 +24,19 @@ float humLombriz = 0;
 int humPinPlanta = A1; 
 float humPlanta = 0; 
 
-int modoPin = 6;
-int humusPin = 7;
-int humusPin_agua = 5;
-int humusPin_humus = 4;
-int aguaPin = 8;
+int modoPin = 5;
+int aguaPin = 4;
+int humusPin = 8;
+int humusPin_agua = 6;
+int humusPin_humus = 7;
 int flujoPin = 10;
 int NumVal=0;
 bool modo, humus, agua, aux, auxh, auxh2, auxh3=false, evento=false;
 bool humus_humus, humus_agua;
 bool flot1state, flot2state, flujostate;
+int min=18, max=6, total=27;
+int d=0;
+int repetir = 0;
 
 int flot1Pin = 3;
 int flot2Pin = 2;
@@ -47,7 +50,8 @@ bool validar(bool val, int pin);
 void TakeData(int fin);
 void InitSensorTH();
 void InitSensorLux();
-void InitUltras();
+void InitSensorUltras();
+void TakeUltra();
 
 const int T_GPS_SEGUNDOS=2;
 const int T_GPS_MILIS =T_GPS_SEGUNDOS*1000;
@@ -66,7 +70,7 @@ void setup()
   pinMode(flot1Pin, INPUT);
   pinMode(flot2Pin, INPUT);
   pinMode(flujoPin, INPUT);
-  InitUltras();
+  InitSensorUltras();
   InitSensorTH();
   InitSensorLux();
 }
@@ -74,7 +78,9 @@ void setup()
 void loop()
 {   
     int fin = millis() - inicio;
+    TakeUltra();
     TakeData(fin);
+    
 
     // if(evento){
       aux = doc2["modo"].as<bool>();
@@ -92,21 +98,22 @@ void loop()
     // }
 
 
-    if(auxh2==true && auxh==true && NumVal<3){
+    if(auxh2==true && NumVal<3 && repetir<1){
       // Serial.println("entre a validación");
       if(!auxh3){
-        if(flot1state==false && flot2state==false && NumVal==0){
+        if(d>min && NumVal==0){
+          Serial.println("auxh3 es falso!");
           humus_humus = validar(true, humusPin_humus);
           Serial.println("ambos flotadores false");
           NumVal=1;
         }
-        if(flot1state==true && flot2state==false && NumVal==1){
+        if(d<=min && d>=max && NumVal==1){
           humus_humus = validar(false, humusPin_humus);
           humus_agua = validar(true, humusPin_agua);
           Serial.println("flotador 1 true");
           NumVal=2;
         }
-        if(flot1state==true && flot2state==true && NumVal==2){
+        if(d<max && NumVal==2){
           humus_humus = validar(false, humusPin_humus);
           humus_agua = validar(false, humusPin_agua);
           humus = validar(true, humusPin);
@@ -117,14 +124,16 @@ void loop()
       }
     }
     else if (auxh3==true && NumVal>2){
-        if(flujostate==false && flot1state==false && flot2state==false){
-          Serial.println("no hay flujo");
+        if(d>=(total-1)){
+          Serial.println("no hay humus");
           auxh3=false;
+          auxh2=false;
           NumVal=0;
           humus = validar(false, humusPin);
+          repetir++;
         }
 
-        else if (flujostate==true && flot1state==false && flot2state==false){
+        else if (d<=(total-1) && auxh==true){
           humus = validar(true, humusPin);
           Serial.println("aun hay flujo");
         }
@@ -137,14 +146,15 @@ void loop()
    
 }
 
-//Inicializar sensor de temperatura y humedad ambiente
-void InitSensorTH(){
+//Asignamos pines para sensor de ultrasonido
+void InitSensorUltras(){
   pinMode(Trigger, OUTPUT); //pin como salida
   pinMode(Echo, INPUT);  //pin como entrada
   digitalWrite(Trigger, LOW);//Inicializamos el pin con 0
 }
 
-void InitUltras(){
+//Inicializar sensor de temperatura y humedad ambiente
+void InitSensorTH(){
   if (mySensor.beginI2C() == false) //Begin communication over I2C
   {
     Serial.println("No se pudo establecer comunicación con el sensor de Hum y Temp.");
@@ -194,6 +204,15 @@ void serialEvent() {
 }
 
 
+void TakeUltra(){
+  long t; //timepo que demora en llegar el eco
+  digitalWrite(Trigger, HIGH);
+  delayMicroseconds(10);          //Enviamos un pulso de 10us
+  digitalWrite(Trigger, LOW);
+  t = pulseIn(Echo, HIGH); //obtenemos el ancho del pulso
+  d = t/59;             //escalamos el tiempo a una distancia en cm
+}
+
 //Tomar datos de acuerdo con T_GPS_MILIS
 void TakeData(int fin){
   if(fin >= T_GPS_MILIS){
@@ -208,9 +227,9 @@ void TakeData(int fin){
       humPlanta = fmap(humPlanta, 0, 1023, 100.0, 0.0);
       float templombriz = tempLom.getTempCByIndex(0);
       float tempplanta = tempPla.getTempCByIndex(1);
-      flot1state = digitalRead(flot1Pin);
-      flot2state = digitalRead(flot2Pin);
-      flujostate = digitalRead(flujoPin);
+      // flot1state = digitalRead(flot1Pin);
+      // flot2state = digitalRead(flot2Pin);
+      // flujostate = digitalRead(flujoPin);
 
       doc["Hum"] = ((int) (BMEhumid*100))/100.0;
       doc["Temp"] = BMEtempC;
@@ -224,16 +243,23 @@ void TakeData(int fin){
 
       String Data2 = "{\"modo\":false,\"valva\":false,\"valvh\":true}";
       deserializeJson(doc2, Data2);
-      serializeJson(doc2, Serial);
-      Serial.println();
-      serializeJson(doc, Serial);
+      // serializeJson(doc2, Serial);
+      // Serial.println();
+      // serializeJson(doc, Serial);
       Serial.println(); 
 
       Serial.println(NumVal);
       Serial.print("Humus: ");
       Serial.println(humus);
-      Serial.print("estado flujo: ");
-      Serial.println(flujostate);
+      Serial.print("distancia: ");
+      Serial.println(d);
+      Serial.println(" auxh2: ");
+      Serial.print(auxh2);
+      Serial.print(" auxh: ");
+      Serial.print(auxh);
+      Serial.print(" auxh3: ");
+      Serial.print(auxh3);
+      Serial.println();
       inicio = millis();
     }
 }
