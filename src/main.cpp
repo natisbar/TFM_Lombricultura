@@ -11,6 +11,8 @@ StaticJsonDocument<200> doc2;
 // Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
 const int pinDatosDQ = 9;
+const int Trigger = 11;   //Pin digital 2 para el Trigger del sensor
+const int Echo = 12;   //Pin digital 3 para el Echo del sensor
 
 OneWire oneWireObjeto(pinDatosDQ);
 DallasTemperature tempLom(&oneWireObjeto);
@@ -45,6 +47,7 @@ bool validar(bool val, int pin);
 void TakeData(int fin);
 void InitSensorTH();
 void InitSensorLux();
+void InitUltras();
 
 const int T_GPS_SEGUNDOS=2;
 const int T_GPS_MILIS =T_GPS_SEGUNDOS*1000;
@@ -63,6 +66,7 @@ void setup()
   pinMode(flot1Pin, INPUT);
   pinMode(flot2Pin, INPUT);
   pinMode(flujoPin, INPUT);
+  InitUltras();
   InitSensorTH();
   InitSensorLux();
 }
@@ -135,6 +139,12 @@ void loop()
 
 //Inicializar sensor de temperatura y humedad ambiente
 void InitSensorTH(){
+  pinMode(Trigger, OUTPUT); //pin como salida
+  pinMode(Echo, INPUT);  //pin como entrada
+  digitalWrite(Trigger, LOW);//Inicializamos el pin con 0
+}
+
+void InitUltras(){
   if (mySensor.beginI2C() == false) //Begin communication over I2C
   {
     Serial.println("No se pudo establecer comunicación con el sensor de Hum y Temp.");
