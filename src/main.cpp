@@ -31,22 +31,14 @@ int humusPin_agua = 6;
 int humusPin_humus = 7;
 int flujoPin = 10;
 int NumVal=0;
-bool modo, humus, agua, aux, auxh, auxh2, auxh3=false, evento=false;
+bool evento=false, aux=false;
 bool humus_humus, humus_agua;
-bool flot1state, flot2state, flujostate;
-int min=18, max=6, total=27;
 int d=0;
-int repetir = 0;
-
-int flot1Pin = 3;
-int flot2Pin = 2;
-// String Data = "{\"modo\":true,\"valva\":true,\"valvh\":true}";
-// String Data = "";
 
 int inicio=0;
 
 float fmap(float x, float in_min, float in_max, float out_min, float out_max);
-bool validar(bool val, int pin);
+void validar(bool val, int pin);
 void TakeData(int fin);
 void InitSensorTH();
 void InitSensorLux();
@@ -67,9 +59,6 @@ void setup()
   pinMode(humusPin, OUTPUT);
   pinMode(humusPin_agua, OUTPUT);
   pinMode(humusPin_humus, OUTPUT);
-  pinMode(flot1Pin, INPUT);
-  pinMode(flot2Pin, INPUT);
-  pinMode(flujoPin, INPUT);
   InitSensorUltras();
   InitSensorTH();
   InitSensorLux();
@@ -80,29 +69,20 @@ void loop()
     int fin = millis() - inicio;
     TakeUltra();
     TakeData(fin);
-    
 
     if(evento){
-      aux = doc2["valval"].as<bool>(); 
-      modo = validar(aux, aguaLPin);   //Valvula agua lombriz
-      aux = doc2["valvap"].as<bool>(); 
-      agua = validar(aux, aguaPPin);   //Valvula agua planta
-      aux = doc2["valvh"].as<bool>(); 
-      humus = validar(aux, humusPin);  //bomba humus
-      aux = doc2["valvh_agua"].as<bool>();
-      humus = validar(aux, humusPin_agua);  //bomba mezcla agua
-      aux = doc2["valvh_humus"].as<bool>();
-      humus = validar(aux, humusPin_humus); //bomba mezcla humus
-      // auxh = doc2["valvh"].as<bool>();
-      
-      // serializeJson(doc2, Serial);
-      // if(auxh){
-      //  auxh2=true;
-      // }
-      // else auxh2=false;
-      // evento = false;
+      aux = doc2["valal"].as<bool>(); 
+      validar(aux, aguaLPin);   //Valvula agua lombriz
+      aux = doc2["valap"].as<bool>(); 
+      validar(aux, aguaPPin);   //Valvula agua planta
+      aux = doc2["valh"].as<bool>(); 
+      validar(aux, humusPin);  //bomba humus
+      aux = doc2["valvha"].as<bool>();
+      validar(aux, humusPin_agua);  //bomba mezcla agua
+      aux = doc2["valvhh"].as<bool>();
+      validar(aux, humusPin_humus); //bomba mezcla humus
+      evento = false;
     }
-   
 }
 
 //Asignamos pines para sensor de ultrasonido
@@ -133,16 +113,12 @@ void InitSensorLux(){
 }
 
 
-bool validar(bool val, int pin){
+void validar(bool val, int pin){
     if(val){
       digitalWrite(pin, HIGH);
-      // Serial.println("salida HIGH"); 
-      return true;
     }
     else {
       digitalWrite(pin, LOW);
-      // Serial.println("salida LOW");
-      return false;
     }
 }
 
@@ -158,7 +134,6 @@ void serialEvent() {
   evento = true;
   String Data = Serial.readString();
   deserializeJson(doc2, Data);
-  // if(doc2["valvh"].as<bool>()==true){auxh = false;}
   Data="";
 }
 
@@ -199,7 +174,7 @@ void TakeData(int fin){
       doc["Humplanta"] = ((int) (humPlanta*100))/100.0;
       doc["Ultras"] = d;
 
-      // String Data2 = "{\"modo\":false,\"valva\":false,\"valvh\":true}";
+      // String Data2 = "{\"modo\":false,\"valvap\":false,\"valval\":true}";
       // deserializeJson(doc2, Data2);
       // serializeJson(doc2, Serial);
       // Serial.println();
