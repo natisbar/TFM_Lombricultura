@@ -1,14 +1,14 @@
 #include <Wire.h>
 #include "SparkFunBME280.h"
 #include <ArduinoJson.h>
-// #include "Adafruit_VEML7700.h"
+#include "Adafruit_VEML7700.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
 BME280 mySensor;
 StaticJsonDocument<200> doc;
 StaticJsonDocument<200> doc2;
-// Adafruit_VEML7700 veml = Adafruit_VEML7700();
+Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
 const int pinDatosDQ = 9;
 const int Trigger = 11;   //Pin digital 2 para el Trigger del sensor
@@ -24,6 +24,8 @@ float humLombriz = 0;
 int humPinPlanta = A1; 
 float humPlanta = 0; 
 
+// int pinFotor = A2;
+
 int aguaPPin = 5;
 int aguaLPin = 4;
 int humusPin = 8;
@@ -33,6 +35,7 @@ int flujoPin = 10;
 int NumVal=0;
 bool evento=false, aux=false;
 bool humus_humus, humus_agua;
+bool existTH=false, existLux=false;
 int d=0;
 
 int inicio=0;
@@ -67,7 +70,6 @@ void setup()
 void loop()
 {   
     int fin = millis() - inicio;
-    TakeUltra();
     TakeData(fin);
 
     if(evento){
@@ -81,6 +83,7 @@ void loop()
       validar(aux, humusPin_agua);  //bomba mezcla agua
       aux = doc2["valvhh"].as<bool>();
       validar(aux, humusPin_humus); //bomba mezcla humus
+      // serializeJson(doc2, Serial);
       evento = false;
     }
 }
@@ -98,18 +101,22 @@ void InitSensorTH(){
   {
     Serial.println("No se pudo establecer comunicación con el sensor de Hum y Temp.");
   }
-  else Serial.println("Sensor de Hum y Temp OK");
+  else {
+    Serial.println("Sensor de Hum y Temp OK");
+    existTH=true;
+  }
+    
 }
 
 //Inicializar sensor de lux
 void InitSensorLux(){
-  // if (!veml.begin()) {
-  //   Serial.println("Sensor not found");
-  // }
-  // Serial.println("Sensor found");
-
-  // veml.setGain(VEML7700_GAIN_1);
-  // veml.setIntegrationTime(VEML7700_IT_800MS);
+  if (veml.begin()) {
+    Serial.println("Sensor found");
+    veml.setGain(VEML7700_GAIN_1);
+    veml.setIntegrationTime(VEML7700_IT_800MS);
+    existLux=true;
+  }
+  else {Serial.println("Sensor not found");}
 }
 
 
@@ -150,29 +157,38 @@ void TakeUltra(){
 //Tomar datos de acuerdo con T_GPS_MILIS
 void TakeData(int fin){
   if(fin >= T_GPS_MILIS){
-      float BMEhumid = mySensor.readFloatHumidity();  
-      float BMEtempC = mySensor.readTempC();
-      // float lux = veml.readLux();
+      TakeUltra();
+      if(existTH){
+        float BMEhumid = mySensor.readFloatHumidity();  
+        float BMEtempC = mySensor.readTempC();
+        doc["Hum"] = ((int) (BMEhumid*100))/100.0;
+        doc["Temp"] = BMEtempC;
+      }
+      if (existLux){
+        float lux = veml.readLux();
+        doc["Lux"] = ((int) (lux*100))/100.0;
+      }
+      
       tempLom.requestTemperatures();
       tempPla.requestTemperatures();
       humLombriz = analogRead(humPinLombriz);
       humLombriz = fmap(humLombriz, 0, 1023, 100.0, 0.0);
       humPlanta = analogRead(humPinPlanta);
       humPlanta = fmap(humPlanta, 0, 1023, 100.0, 0.0);
+
+      // int fotoR = analogRead(pinFotor);
       float templombriz = tempLom.getTempCByIndex(0);
       float tempplanta = tempPla.getTempCByIndex(1);
       // flot1state = digitalRead(flot1Pin);
       // flot2state = digitalRead(flot2Pin);
       // flujostate = digitalRead(flujoPin);
 
-      doc["Hum"] = ((int) (BMEhumid*100))/100.0;
-      doc["Temp"] = BMEtempC;
-      // doc["Lux"] = ((int) (lux*100))/100.0;
       doc["Templombriz"] = ((int) (templombriz*100))/100.0;
       doc["Tempplanta"] = ((int) (tempplanta*100))/100.0;
       doc["Humlombriz"] = ((int) (humLombriz*100))/100.0;
       doc["Humplanta"] = ((int) (humPlanta*100))/100.0;
       doc["Ultras"] = d;
+      // doc["fotoR"] = fotoR;
 
       // String Data2 = "{\"modo\":false,\"valvap\":false,\"valval\":true}";
       // deserializeJson(doc2, Data2);
